@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подкидной Дурак</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Lobby Screen -->
+  <div id="lobby">
+    <h1>Подкидной Дурак</h1>
+    <div class="lobby-buttons">
+      <button id="btnCreate">Создать игру</button>
+    </div>
+    <div id="linkBox" class="hidden">
+      <p>Отправьте ссылку второму игроку:</p>
+      <div class="link-row">
+        <input id="shareLink" readonly>
+        <button id="btnCopy">Копировать</button>
+      </div>
+      <p id="waiting">Ожидание второго игрока...</p>
+    </div>
+    <div id="lobbyError" class="error hidden"></div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game" class="hidden">
+    <div id="statusBar"></div>
+
+    <div id="opponentArea">
+      <div id="opponentHand"></div>
+    </div>
+
+    <div id="middleArea">
+      <div id="deckArea">
+        <div id="trumpDisplay"></div>
+        <div id="deckCount"></div>
+      </div>
+      <div id="table"></div>
+    </div>
+
+    <div id="controls">
+      <button id="btnBeaten" class="hidden">Бита</button>
+      <button id="btnTake" class="hidden">Беру</button>
+      <button id="btnDoneThrow" class="hidden">Хватит</button>
+    </div>
+
+    <div id="playerArea">
+      <div id="playerHand"></div>
+    </div>
+
+    <div id="gameOver" class="hidden">
+      <div id="gameOverText"></div>
+      <button id="btnRematch">Играть ещё</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #1a6b3c;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hidden { display: none !important; }
+
+/* ── Lobby ── */
+#lobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 24px;
+}
+
+#lobby h1 {
+  font-size: 48px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.lobby-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+button {
+  font-size: 20px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+#btnCreate {
+  background: #f5c542;
+  color: #333;
+}
+
+#linkBox {
+  background: rgba(0,0,0,0.3);
+  padding: 20px 28px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+#linkBox p { margin-bottom: 12px; font-size: 18px; }
+
+.link-row {
+  display: flex;
+  gap: 8px;
+}
+
+#shareLink {
+  font-size: 16px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  width: 360px;
+  background: #fff;
+  color: #333;
+}
+
+#btnCopy {
+  background: #4caf50;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+#waiting {
+  color: #f5c542;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.error {
+  background: #c0392b;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+/* ── Game ── */
+#game {
+  width: 100%;
+  max-width: 900px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+}
+
+#statusBar {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 8px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+/* Opponent */
+#opponentArea {
+  display: flex;
+  justify-content: center;
+  min-height: 70px;
+  margin-bottom: 8px;
+}
+
+#opponentHand {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.card-back {
+  width: 50px;
+  height: 72px;
+  background: linear-gradient(135deg, #1a237e 25%, #283593 25%, #283593 50%, #1a237e 50%, #1a237e 75%, #283593 75%);
+  background-size: 12px 12px;
+  border-radius: 6px;
+  border: 2px solid #fff;
+}
+
+/* Middle: deck + table */
+#middleArea {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex: 1;
+  min-height: 180px;
+}
+
+#deckArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 80px;
+}
+
+#trumpDisplay {
+  position: relative;
+}
+
+#trumpDisplay .card {
+  transform: rotate(90deg);
+  transform-origin: center center;
+}
+
+#deckCount {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+#table {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.table-pair {
+  position: relative;
+  width: 80px;
+  height: 130px;
+}
+
+.table-pair .card:first-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.table-pair .card:nth-child(2) {
+  position: absolute;
+  top: 20px;
+  left: 14px;
+}
+
+/* Controls */
+#controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+#btnBeaten {
+  background: #4caf50;
+  color: #fff;
+}
+
+#btnTake {
+  background: #e67e22;
+  color: #fff;
+}
+
+#btnDoneThrow {
+  background: #3498db;
+  color: #fff;
+}
+
+/* Player hand */
+#playerArea {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 16px;
+}
+
+#playerHand {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── Card ── */
+.card {
+  width: 72px;
+  height: 104px;
+  background: #fff;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: default;
+  user-select: none;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.card .rank {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.card .suit {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.card.red { color: #c0392b; }
+.card.black { color: #222; }
+
+.card.playable {
+  cursor: pointer;
+  box-shadow: 0 0 12px 4px #4caf50, 0 0 24px 8px rgba(76,175,80,0.4);
+  border-color: #4caf50;
+}
+
+.card.playable:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 18px 6px #4caf50, 0 0 32px 12px rgba(76,175,80,0.5);
+}
+
+.table-pair .card {
+  width: 66px;
+  height: 96px;
+  font-size: 18px;
+  cursor: default;
+}
+
+.table-pair .card .rank { font-size: 17px; }
+.table-pair .card .suit { font-size: 24px; }
+
+/* Unbeaten attack card - highlight */
+.table-pair .card.unbeaten {
+  border-color: #e67e22;
+  box-shadow: 0 0 8px rgba(230, 126, 34, 0.5);
+}
+
+/* Trump card in deck area */
+#trumpDisplay .card {
+  width: 66px;
+  height: 96px;
+}
+
+#trumpDisplay .card .rank { font-size: 17px; }
+#trumpDisplay .card .suit { font-size: 24px; }
+
+/* Game over overlay */
+#gameOver {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  z-index: 100;
+}
+
+#gameOverText {
+  font-size: 42px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#btnRematch {
+  background: #f5c542;
+  color: #333;
+  font-size: 24px;
+  padding: 16px 40px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  #lobby h1 { font-size: 32px; }
+  #shareLink { width: 220px; font-size: 13px; }
+  .card { width: 58px; height: 84px; font-size: 18px; }
+  .card .rank { font-size: 16px; }
+  .card .suit { font-size: 22px; }
+  .table-pair .card { width: 54px; height: 78px; }
+  .table-pair { width: 68px; height: 110px; }
+  .card-back { width: 40px; height: 58px; }
+  #gameOverText { font-size: 28px; }
+  button { font-size: 16px; padding: 10px 20px; }
+}
