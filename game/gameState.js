@@ -25,6 +25,7 @@ function createGame() {
     phase: PHASES.ATTACKING,
     attacker: firstAttacker,
     defender: 1 - firstAttacker,
+    defenderStartCards: hands[1 - firstAttacker].length,
     defenderTakes: false,
     winner: null,
   };
@@ -77,7 +78,7 @@ function getPlayableCards(game, playerIndex) {
     }
     // Subsequent attacks: only ranks already on the table
     const ranks = getTableRanks(game.table);
-    const maxCards = Math.min(6, game.hands[game.defender].length);
+    const maxCards = Math.min(6, game.defenderStartCards);
     const uncovered = game.table.filter(p => !p.defense).length;
     if (uncovered > 0) return []; // must wait for defense or take
     if (game.table.length >= maxCards) return [];
@@ -171,6 +172,7 @@ function declareBeaten(game, playerIndex) {
   const newAttacker = game.defender;
   game.attacker = newAttacker;
   game.defender = 1 - newAttacker;
+  game.defenderStartCards = game.hands[1 - newAttacker].length;
   game.phase = PHASES.ATTACKING;
   return { ok: true };
 }
@@ -207,6 +209,7 @@ function finishThrowingIn(game, playerIndex) {
   if (over) return { ok: true };
 
   // Attacker keeps attacking (defender took, so attacker stays the same)
+  game.defenderStartCards = game.hands[game.defender].length;
   game.phase = PHASES.ATTACKING;
   return { ok: true };
 }
