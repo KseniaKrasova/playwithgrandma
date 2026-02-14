@@ -95,10 +95,9 @@ function getPlayableCards(game, playerIndex) {
 
   if (game.phase === PHASES.THROWING_IN) {
     if (playerIndex === game.defender) return [];
-    // Attacker can throw in cards with ranks on the table
+    // Attacker can throw in cards with matching ranks, up to 6 total on table
     const ranks = getTableRanks(game.table);
-    const maxCards = Math.min(6, game.hands[game.defender].length + game.table.filter(p => !p.defense).length);
-    if (game.table.length >= maxCards) return [];
+    if (game.table.length >= 6) return [];
     return hand.filter(c => ranks.has(c.rank)).map(c => c.id);
   }
 
