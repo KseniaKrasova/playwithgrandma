@@ -166,20 +166,11 @@ function renderPlayerHand(state) {
   });
 }
 
-// Unicode playing card map: https://en.wikipedia.org/wiki/Playing_cards_in_Unicode
-const UNICODE_CARDS = {
-  '♠': { '6': '🂦', '7': '🂧', '8': '🂨', '9': '🂩', '10': '🂪', 'В': '🂫', 'Д': '🂭', 'К': '🂮', 'Т': '🂡' },
-  '♥': { '6': '🂶', '7': '🂷', '8': '🂸', '9': '🂹', '10': '🂺', 'В': '🂻', 'Д': '🂽', 'К': '🂾', 'Т': '🂱' },
-  '♦': { '6': '🃆', '7': '🃇', '8': '🃈', '9': '🃉', '10': '🃊', 'В': '🃋', 'Д': '🃍', 'К': '🃎', 'Т': '🃁' },
-  '♣': { '6': '🃖', '7': '🃗', '8': '🃘', '9': '🃙', '10': '🃚', 'В': '🃛', 'Д': '🃝', 'К': '🃞', 'Т': '🃑' },
-};
-
 function createCardEl(card, playable) {
   const div = document.createElement('div');
   const color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
   div.className = 'card ' + color + (playable ? ' playable' : '');
-  const emoji = UNICODE_CARDS[card.suit]?.[card.rank] || '';
-  div.innerHTML = '<span class="card-emoji">' + emoji + '</span><span class="card-label">' + card.rank + card.suit + '</span>';
+  div.innerHTML = '<span class="rank">' + card.rank + '</span><span class="suit">' + card.suit + '</span>';
   div.dataset.cardId = card.id;
   return div;
 }

@@ -266,15 +266,14 @@ button:active {
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.card .card-emoji {
-  font-size: 54px;
+.card .rank {
+  font-size: 20px;
   line-height: 1;
 }
 
-.card .card-label {
-  font-size: 12px;
+.card .suit {
+  font-size: 28px;
   line-height: 1;
-  opacity: 0.7;
 }
 
 .card.red { color: #c0392b; }
@@ -298,8 +297,8 @@ button:active {
   cursor: default;
 }
 
-.table-pair .card .card-emoji { font-size: 44px; }
-.table-pair .card .card-label { font-size: 10px; }
+.table-pair .card .rank { font-size: 17px; }
+.table-pair .card .suit { font-size: 24px; }
 
 /* Unbeaten attack card - highlight */
 .table-pair .card.unbeaten {
@@ -313,8 +312,8 @@ button:active {
   height: 96px;
 }
 
-#trumpDisplay .card .card-emoji { font-size: 44px; }
-#trumpDisplay .card .card-label { font-size: 10px; }
+#trumpDisplay .card .rank { font-size: 17px; }
+#trumpDisplay .card .suit { font-size: 24px; }
 
 /* Game over overlay */
 #gameOver {
