@@ -215,11 +215,15 @@ function finishThrowingIn(game, playerIndex) {
 }
 
 function drawCards(game) {
-  // Attacker draws first, then defender
   const order = [game.attacker, game.defender];
-  for (const p of order) {
-    while (game.hands[p].length < HAND_SIZE && game.deck.length > 0) {
-      game.hands[p].push(game.deck.pop());
+  let needMore = true;
+  while (needMore && game.deck.length > 0) {
+    needMore = false;
+    for (const p of order) {
+      if (game.hands[p].length < HAND_SIZE && game.deck.length > 0) {
+        game.hands[p].push(game.deck.pop());
+        needMore = true;
+      }
     }
   }
 }
