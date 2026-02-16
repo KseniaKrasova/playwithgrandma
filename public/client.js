@@ -4,6 +4,7 @@ let myRoomId = null;
 let myToken = null;
 let myPlayerIndex = null;
 let currentState = null;
+let hintTimer = null;
 
 // ── DOM refs ──
 const lobbyEl = document.getElementById('lobby');
@@ -144,11 +145,11 @@ function renderTable(state) {
 
 function renderPlayerHand(state) {
   playerHand.innerHTML = '';
+  clearTimeout(hintTimer);
+
   const sorted = [...state.hand].sort((a, b) => {
-    // Sort by suit then by rank value
     const suitOrder = ['♣', '♦', '♥', '♠'];
     const rankValues = { '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'В': 11, 'Д': 12, 'К': 13, 'Т': 14 };
-    // Trump suit always last
     const aIsTrump = a.suit === state.trumpSuit ? 1 : 0;
     const bIsTrump = b.suit === state.trumpSuit ? 1 : 0;
     if (aIsTrump !== bIsTrump) return aIsTrump - bIsTrump;
@@ -158,12 +159,20 @@ function renderPlayerHand(state) {
   });
 
   sorted.forEach(card => {
-    const el = createCardEl(card, state.playableCardIds.includes(card.id));
+    const el = createCardEl(card, false);
     if (state.playableCardIds.includes(card.id)) {
+      el.style.cursor = 'pointer';
       el.addEventListener('click', () => onCardClick(card));
     }
     playerHand.appendChild(el);
   });
+
+  hintTimer = setTimeout(() => {
+    state.playableCardIds.forEach(id => {
+      const el = playerHand.querySelector('[data-card-id="' + id + '"]');
+      if (el) el.classList.add('playable');
+    });
+  }, 15000);
 }
 
 function createCardEl(card, playable) {
