@@ -109,7 +109,13 @@ io.on('connection', (socket) => {
     const room = getRoom(roomId);
     if (!room) return cb({ error: 'Комната не найдена' });
 
-    room.game = createGame();
+    const prevGame = room.game;
+    let firstAttacker = null;
+    if (prevGame && prevGame.winner != null && prevGame.winner !== -1) {
+      firstAttacker = 1 - prevGame.winner; // loser starts
+    }
+
+    room.game = createGame(firstAttacker);
     broadcastState(room);
     cb({ ok: true });
   });

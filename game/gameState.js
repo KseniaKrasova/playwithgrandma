@@ -1,7 +1,7 @@
 const { RANK_VALUES, HAND_SIZE, PHASES } = require('./constants');
 const { createDeck, shuffle } = require('./deck');
 
-function createGame() {
+function createGame(firstAttacker) {
   const deck = shuffle(createDeck());
   const trumpCard = deck[0]; // bottom card is trump
   const trumpSuit = trumpCard.suit;
@@ -13,8 +13,10 @@ function createGame() {
     hands[1].push(deck.pop());
   }
 
-  // Determine who attacks first: player with lowest trump card
-  const firstAttacker = pickFirstAttacker(hands, trumpSuit);
+  // Rematch: loser starts; first game: lowest trump starts
+  if (firstAttacker == null) {
+    firstAttacker = pickFirstAttacker(hands, trumpSuit);
+  }
 
   return {
     deck,
