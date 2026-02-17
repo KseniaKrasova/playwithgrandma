@@ -326,6 +326,24 @@ button:active {
   padding: 16px 40px;
 }
 
+/* ── Card movement animations ── */
+#table .card {
+  will-change: transform, opacity;
+}
+
+.card.flip-animating {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-back.flip-animating {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card.table-clear-anim {
+  transition: transform 0.4s ease-in, opacity 0.4s ease-in;
+  opacity: 0;
+}
+
 /* ── Responsive ── */
 @media (max-width: 600px) {
   #lobby h1 { font-size: 32px; }
