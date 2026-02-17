@@ -7,6 +7,7 @@ let currentState = null;
 let hintTimer = null;
 let previousState = null;
 let isAnimating = false;
+let discardCount = 0;
 
 // ── Animation: State diffing ──
 function diffStates(oldState, newState) {
@@ -76,6 +77,8 @@ function getCenter(el) {
 }
 
 function getDeckOrigin() {
+  const deckBack = document.getElementById('deckBackCard');
+  if (deckBack) return getCenter(deckBack);
   const deckEl = document.getElementById('deckArea');
   return getCenter(deckEl);
 }
@@ -83,6 +86,11 @@ function getDeckOrigin() {
 function getOpponentOrigin() {
   const oppEl = document.getElementById('opponentHand');
   return getCenter(oppEl);
+}
+
+function getDiscardOrigin() {
+  const discardEl = document.getElementById('discardPile');
+  return getCenter(discardEl);
 }
 
 // ── Animation: FLIP engine ──
@@ -198,8 +206,6 @@ function animateTableClear(direction, callback) {
     return;
   }
 
-  var yTarget = direction === 'up' ? -300 : 300;
-
   tableCards.forEach(function(card) {
     card.style.transition = 'none';
     card.style.transform = '';
@@ -207,10 +213,25 @@ function animateTableClear(direction, callback) {
 
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
-      tableCards.forEach(function(card) {
-        card.classList.add('table-clear-anim');
-        card.style.transform = 'translateY(' + yTarget + 'px)';
-      });
+      if (direction === 'up') {
+        // Beaten: fly toward discard pile
+        var discardTarget = getDiscardOrigin();
+        tableCards.forEach(function(card) {
+          var rect = card.getBoundingClientRect();
+          var cardCenterX = rect.left + rect.width / 2;
+          var cardCenterY = rect.top + rect.height / 2;
+          var dx = discardTarget.x - cardCenterX;
+          var dy = discardTarget.y - cardCenterY;
+          card.classList.add('table-clear-anim');
+          card.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(0.3)';
+        });
+      } else {
+        // Taken: fly down toward player hand
+        tableCards.forEach(function(card) {
+          card.classList.add('table-clear-anim');
+          card.style.transform = 'translateY(300px)';
+        });
+      }
       setTimeout(function() {
         if (callback) callback();
       }, 400);
@@ -231,6 +252,7 @@ const opponentHand = document.getElementById('opponentHand');
 const trumpDisplay = document.getElementById('trumpDisplay');
 const deckCount = document.getElementById('deckCount');
 const tableEl = document.getElementById('table');
+const discardPile = document.getElementById('discardPile');
 const playerHand = document.getElementById('playerHand');
 const btnBeaten = document.getElementById('btnBeaten');
 const btnTake = document.getElementById('btnTake');
@@ -329,6 +351,11 @@ socket.on('gameState', (state) => {
     var weGrew = state.hand.length > oldState.hand.length;
     var direction = (oppGrew || weGrew) ? 'down' : 'up';
 
+    // Track discarded cards when beaten
+    if (direction === 'up') {
+      discardCount += oldTableCount;
+    }
+
     animateTableClear(direction, function() {
       // After table cards animate out, snapshot, render, and animate draws
       var positions = snapshotCardPositions();
@@ -357,6 +384,7 @@ function render(state) {
   renderStatus(state);
   renderOpponent(state);
   renderDeck(state);
+  renderDiscardPile();
   renderTable(state);
   renderPlayerHand(state);
   renderControls(state);
@@ -387,9 +415,32 @@ function renderOpponent(state) {
 function renderDeck(state) {
   trumpDisplay.innerHTML = '';
   if (state.trumpCard) {
-    trumpDisplay.appendChild(createCardEl(state.trumpCard));
+    var trumpEl = createCardEl(state.trumpCard);
+    trumpEl.classList.add('trump-card');
+    trumpDisplay.appendChild(trumpEl);
+  }
+  if (state.deckCount > 0) {
+    var deckBack = document.createElement('div');
+    deckBack.className = 'deck-back';
+    deckBack.id = 'deckBackCard';
+    deckBack.innerHTML = '<img src="cards/back.png" alt="deck" draggable="false">';
+    trumpDisplay.appendChild(deckBack);
   }
   deckCount.textContent = state.deckCount > 0 ? ('В колоде: ' + state.deckCount) : 'Колода пуста';
+}
+
+function renderDiscardPile() {
+  discardPile.innerHTML = '';
+  if (discardCount <= 0) return;
+  // Show stacked card-backs; more cards = slightly larger stack
+  var layers = Math.min(discardCount, 3);
+  for (var i = 0; i < layers; i++) {
+    var div = document.createElement('div');
+    div.className = 'discard-card';
+    div.innerHTML = '<img src="cards/back.png" alt="discard" draggable="false">';
+    div.style.transform = 'rotate(' + (i * 5 - 5) + 'deg)';
+    discardPile.appendChild(div);
+  }
 }
 
 function renderTable(state) {
@@ -540,6 +591,7 @@ btnDoneThrow.addEventListener('click', () => {
 btnRematch.addEventListener('click', () => {
   previousState = null;
   isAnimating = false;
+  discardCount = 0;
   socket.emit('rematch', { roomId: myRoomId }, (res) => {
     if (res.error) console.log('Ошибка:', res.error);
   });

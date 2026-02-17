@@ -116,19 +116,25 @@ button:active {
   display: flex;
   flex-direction: column;
   padding: 8px 12px;
+  padding-bottom: 60px;
 }
 
+/* ── Status bar (bottom) ── */
 #statusBar {
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
-  padding: 8px;
-  background: rgba(0,0,0,0.25);
-  border-radius: 10px;
-  margin-bottom: 8px;
+  padding: 10px 8px;
+  background: rgba(0,0,0,0.35);
+  border-radius: 10px 10px 0 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
 }
 
-/* Opponent */
+/* ── Opponent hand (overlapping) ── */
 #opponentArea {
   display: flex;
   justify-content: center;
@@ -139,7 +145,6 @@ button:active {
 #opponentHand {
   display: flex;
   justify-content: center;
-  gap: 4px;
 }
 
 .card-back {
@@ -147,6 +152,11 @@ button:active {
   height: 72px;
   border-radius: 6px;
   overflow: hidden;
+  margin-right: -12px;
+}
+
+.card-back:last-child {
+  margin-right: 0;
 }
 
 .card-back img {
@@ -156,13 +166,14 @@ button:active {
   border-radius: 6px;
 }
 
-/* Middle: deck + table */
-#middleArea {
+/* ── Deck row: deck left, discard right ── */
+#deckRow {
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  flex: 1;
-  min-height: 180px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 4px 0;
+  margin-bottom: 8px;
 }
 
 #deckArea {
@@ -175,25 +186,87 @@ button:active {
 
 #trumpDisplay {
   position: relative;
+  width: 100px;
+  height: 96px;
 }
 
-#trumpDisplay .card {
-  transform: rotate(90deg);
+#trumpDisplay .trump-card {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%) rotate(90deg);
   transform-origin: center center;
 }
 
-#deckCount {
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 8px;
+#trumpDisplay .deck-back {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 66px;
+  height: 96px;
+  border-radius: 6px;
+  overflow: hidden;
+  z-index: 1;
 }
 
-#table {
+#trumpDisplay .deck-back img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 6px;
+}
+
+#deckCount {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* ── Discard pile ── */
+#discardPile {
+  min-width: 50px;
+  min-height: 72px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+#discardPile:empty::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 72px;
+  border: 2px dashed rgba(255,255,255,0.2);
+  border-radius: 6px;
+}
+
+#discardPile .discard-card {
+  width: 50px;
+  height: 72px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: absolute;
+}
+
+#discardPile .discard-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 6px;
+}
+
+/* ── Table: 3-column grid ── */
+#table {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  justify-items: center;
   align-items: flex-start;
+  width: 100%;
+  min-height: 140px;
   flex: 1;
 }
 
@@ -215,12 +288,17 @@ button:active {
   left: 14px;
 }
 
-/* Controls */
+/* ── Controls (wide, centered) ── */
 #controls {
   display: flex;
   justify-content: center;
   gap: 12px;
   padding: 8px 0;
+}
+
+#controls button {
+  width: 80%;
+  max-width: 320px;
 }
 
 #btnBeaten {
@@ -238,7 +316,7 @@ button:active {
   color: #fff;
 }
 
-/* Player hand */
+/* ── Player hand (overlapping) ── */
 #playerArea {
   display: flex;
   justify-content: center;
@@ -249,7 +327,14 @@ button:active {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 6px;
+}
+
+#playerHand .card {
+  margin-right: -8px;
+}
+
+#playerHand .card:last-child {
+  margin-right: 0;
 }
 
 /* ── Card ── */
@@ -295,7 +380,7 @@ button:active {
 }
 
 /* Trump card in deck area */
-#trumpDisplay .card {
+#trumpDisplay .trump-card {
   width: 66px;
   height: 96px;
 }
@@ -355,6 +440,9 @@ button:active {
   .table-pair .card { width: 54px; height: 78px; }
   .table-pair { width: 68px; height: 110px; }
   .card-back { width: 40px; height: 58px; }
+  #discardPile:empty::after { width: 40px; height: 58px; }
+  #discardPile .discard-card { width: 40px; height: 58px; }
   #gameOverText { font-size: 28px; }
   button { font-size: 16px; padding: 10px 20px; }
+  #statusBar { font-size: 16px; }
 }
