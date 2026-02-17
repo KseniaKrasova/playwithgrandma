@@ -332,14 +332,17 @@ button:active {
 }
 
 .card.flip-animating {
+  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-back.flip-animating {
+  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card.table-clear-anim {
+  -webkit-transition: -webkit-transform 0.4s ease-in, opacity 0.4s ease-in;
   transition: transform 0.4s ease-in, opacity 0.4s ease-in;
   opacity: 0;
 }

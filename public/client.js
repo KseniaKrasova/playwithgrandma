@@ -97,18 +97,20 @@ function flipAnimate(el, fromRect, duration) {
   el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
   el.style.transition = 'none';
 
-  // Force reflow
-  void el.offsetHeight;
-
-  el.classList.add('flip-animating');
-  el.style.transform = '';
-  el.style.transition = '';
-
+  // Double rAF ensures the browser has painted the inverted position
+  // before starting the transition (mobile Safari ignores offsetHeight reflow)
   return new Promise(function(resolve) {
-    setTimeout(function() {
-      el.classList.remove('flip-animating');
-      resolve();
-    }, duration);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        el.classList.add('flip-animating');
+        el.style.transform = '';
+        el.style.transition = '';
+        setTimeout(function() {
+          el.classList.remove('flip-animating');
+          resolve();
+        }, duration);
+      });
+    });
   });
 }
 
@@ -121,17 +123,18 @@ function flipAnimateFromPoint(el, origin, duration) {
   el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
   el.style.transition = 'none';
 
-  void el.offsetHeight;
-
-  el.classList.add('flip-animating');
-  el.style.transform = '';
-  el.style.transition = '';
-
   return new Promise(function(resolve) {
-    setTimeout(function() {
-      el.classList.remove('flip-animating');
-      resolve();
-    }, duration);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        el.classList.add('flip-animating');
+        el.style.transform = '';
+        el.style.transition = '';
+        setTimeout(function() {
+          el.classList.remove('flip-animating');
+          resolve();
+        }, duration);
+      });
+    });
   });
 }
 
@@ -200,15 +203,19 @@ function animateTableClear(direction, callback) {
   tableCards.forEach(function(card) {
     card.style.transition = 'none';
     card.style.transform = '';
-    void card.offsetHeight;
-
-    card.classList.add('table-clear-anim');
-    card.style.transform = 'translateY(' + yTarget + 'px)';
   });
 
-  setTimeout(function() {
-    if (callback) callback();
-  }, 400);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      tableCards.forEach(function(card) {
+        card.classList.add('table-clear-anim');
+        card.style.transform = 'translateY(' + yTarget + 'px)';
+      });
+      setTimeout(function() {
+        if (callback) callback();
+      }, 400);
+    });
+  });
 }
 
 // ── DOM refs ──
