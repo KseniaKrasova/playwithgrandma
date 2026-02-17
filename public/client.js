@@ -114,6 +114,7 @@ function renderOpponent(state) {
   for (let i = 0; i < state.opponentCardCount; i++) {
     const div = document.createElement('div');
     div.className = 'card-back';
+    div.innerHTML = '<img src="cards/back.png" alt="card back" draggable="false">';
     opponentHand.appendChild(div);
   }
 }
@@ -175,11 +176,17 @@ function renderPlayerHand(state) {
   }, 15000);
 }
 
+const RANK_TO_FILE = { '6': '6', '7': '7', '8': '8', '9': '9', '10': '10', 'В': 'J', 'Д': 'Q', 'К': 'K', 'Т': 'A' };
+const SUIT_TO_FILE = { '♣': 'clubs', '♦': 'diamonds', '♥': 'hearts', '♠': 'spades' };
+
+function cardImageSrc(card) {
+  return 'cards/' + RANK_TO_FILE[card.rank] + '-' + SUIT_TO_FILE[card.suit] + '.png';
+}
+
 function createCardEl(card, playable) {
   const div = document.createElement('div');
-  const color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
-  div.className = 'card ' + color + (playable ? ' playable' : '');
-  div.innerHTML = '<span class="rank">' + card.rank + '</span><span class="suit">' + card.suit + '</span>';
+  div.className = 'card' + (playable ? ' playable' : '');
+  div.innerHTML = '<img src="' + cardImageSrc(card) + '" alt="' + card.rank + card.suit + '" draggable="false">';
   div.dataset.cardId = card.id;
   return div;
 }

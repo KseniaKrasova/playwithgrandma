@@ -145,10 +145,15 @@ button:active {
 .card-back {
   width: 50px;
   height: 72px;
-  background: linear-gradient(135deg, #1a237e 25%, #283593 25%, #283593 50%, #1a237e 50%, #1a237e 75%, #283593 75%);
-  background-size: 12px 12px;
   border-radius: 6px;
-  border: 2px solid #fff;
+  overflow: hidden;
+}
+
+.card-back img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 6px;
 }
 
 /* Middle: deck + table */
@@ -251,33 +256,20 @@ button:active {
 .card {
   width: 72px;
   height: 104px;
-  background: #fff;
   border-radius: 8px;
-  border: 2px solid #ccc;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: bold;
   cursor: default;
   user-select: none;
   position: relative;
   transition: transform 0.15s, box-shadow 0.15s;
+  overflow: hidden;
 }
 
-.card .rank {
-  font-size: 20px;
-  line-height: 1;
+.card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 8px;
 }
-
-.card .suit {
-  font-size: 28px;
-  line-height: 1;
-}
-
-.card.red { color: #c0392b; }
-.card.black { color: #222; }
 
 .card.playable {
   cursor: pointer;
@@ -293,12 +285,8 @@ button:active {
 .table-pair .card {
   width: 66px;
   height: 96px;
-  font-size: 18px;
   cursor: default;
 }
-
-.table-pair .card .rank { font-size: 17px; }
-.table-pair .card .suit { font-size: 24px; }
 
 /* Unbeaten attack card - highlight */
 .table-pair .card.unbeaten {
@@ -311,9 +299,6 @@ button:active {
   width: 66px;
   height: 96px;
 }
-
-#trumpDisplay .card .rank { font-size: 17px; }
-#trumpDisplay .card .suit { font-size: 24px; }
 
 /* Game over overlay */
 #gameOver {
@@ -345,9 +330,7 @@ button:active {
 @media (max-width: 600px) {
   #lobby h1 { font-size: 32px; }
   #shareLink { width: 220px; font-size: 13px; }
-  .card { width: 58px; height: 84px; font-size: 18px; }
-  .card .rank { font-size: 16px; }
-  .card .suit { font-size: 22px; }
+  .card { width: 58px; height: 84px; }
   .table-pair .card { width: 54px; height: 78px; }
   .table-pair { width: 68px; height: 110px; }
   .card-back { width: 40px; height: 58px; }
