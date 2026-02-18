@@ -153,7 +153,7 @@ button:active {
   border-radius: 6px;
   overflow: hidden;
   margin-right: -12px;
-  box-shadow: 3px 4px 10px rgba(80,30,120,0.5);
+  box-shadow: 0 2px 7px rgba(80,30,120,0.55);
 }
 
 .card-back:last-child {
@@ -348,7 +348,7 @@ button:active {
   position: relative;
   transition: transform 0.15s, box-shadow 0.15s;
   overflow: hidden;
-  box-shadow: 3px 4px 10px rgba(80,30,120,0.5);
+  box-shadow: 0 2px 7px rgba(80,30,120,0.55);
 }
 
 .card img {
