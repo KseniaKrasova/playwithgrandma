@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const { createRoom, getRoom, joinRoom, reconnect, getPlayerBySocket } = require('./game/room');
+const { createRoom, getRoom, joinRoom, reconnect, disconnectPlayer, getPlayerBySocket } = require('./game/room');
 const { createGame, playCard, declareBeaten, declareTake, finishThrowingIn, getStateForPlayer } = require('./game/gameState');
 
 const app = express();
@@ -103,6 +103,10 @@ io.on('connection', (socket) => {
 
     broadcastState(room);
     cb({ ok: true });
+  });
+
+  socket.on('disconnect', () => {
+    disconnectPlayer(socket.id);
   });
 
   socket.on('rematch', ({ roomId }, cb) => {
