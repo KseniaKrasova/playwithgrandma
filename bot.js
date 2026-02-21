@@ -6,9 +6,8 @@ const GAME_URL = process.env.GAME_URL;
 
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id,
-    'Привет! Я бот для игры в Дурака.\n\n' +
-    'Отправь /play — я создам комнату и дам тебе ссылку.\n' +
-    'Перешли ссылку бабушке (или другу) и играйте!'
+    'Hi! I\'m the Durak card game bot.\n\n' +
+    'Send /play to invite someone to a game!'
   );
 });
 
@@ -16,13 +15,36 @@ bot.onText(/\/play/, async (msg) => {
   try {
     const res = await fetch(`${GAME_URL}/api/create-room`, { method: 'POST' });
     const { roomId } = await res.json();
-    const link = `${GAME_URL}/?room=${roomId}`;
-    bot.sendMessage(msg.chat.id,
-      `Комната создана! Отправь эту ссылку сопернику:\n\n${link}`
-    );
+
+    bot.sendMessage(msg.chat.id, 'Invite who?', {
+      reply_markup: {
+        inline_keyboard: [[
+          { text: 'Choose contact', switch_inline_query: roomId }
+        ]]
+      }
+    });
   } catch (err) {
-    bot.sendMessage(msg.chat.id, 'Не удалось создать комнату. Попробуй позже.');
+    bot.sendMessage(msg.chat.id, 'Could not create a room. Try again later.');
   }
+});
+
+// When user picks a contact, Telegram fires an inline query with the roomId
+bot.on('inline_query', (query) => {
+  const roomId = query.query;
+  if (!roomId) return;
+
+  const name = query.from.first_name || 'Someone';
+  const link = `${GAME_URL}/?room=${roomId}`;
+
+  bot.answerInlineQuery(query.id, [{
+    type: 'article',
+    id: roomId,
+    title: `Play Durak with ${name}`,
+    description: 'Tap to send the invite',
+    input_message_content: {
+      message_text: `🃏 Play Durak with ${name}!\n\n👉 ${link}`
+    }
+  }]);
 });
 
 console.log('Bot is running...');
