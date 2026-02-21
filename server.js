@@ -9,7 +9,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// REST endpoint for Telegram bot to create rooms
+app.post('/api/create-room', (req, res) => {
+  const room = createRoom();
+  res.json({ roomId: room.id });
+});
 
 function broadcastState(room) {
   for (const player of room.players) {
