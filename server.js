@@ -136,3 +136,6 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Дурак запущен: http://localhost:${PORT}`);
 });
+
+// Start Telegram bot
+require('./bot');
