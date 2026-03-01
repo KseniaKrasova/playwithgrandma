@@ -14,6 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // REST endpoint for Telegram bot to create rooms
 app.post('/api/create-room', (req, res) => {
+  const { createRoom } = require('./game/room');
   const room = createRoom();
   res.json({ roomId: room.id });
 });
@@ -137,5 +138,12 @@ server.listen(PORT, () => {
   console.log(`Дурак запущен: http://localhost:${PORT}`);
 });
 
-// Start Telegram bot
-require('./bot');
+// Start Telegram bot and set up webhook route
+const { bot } = require('./bot');
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+if (BOT_TOKEN && process.env.RAILWAY_PUBLIC_DOMAIN) {
+  app.post(`/bot${BOT_TOKEN}`, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+  });
+}

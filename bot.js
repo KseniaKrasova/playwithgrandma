@@ -2,8 +2,19 @@ require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const { createRoom } = require('./game/room');
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const GAME_URL = process.env.GAME_URL;
+const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+
+// Use webhooks in production (Railway), polling locally
+const isProduction = !!process.env.RAILWAY_PUBLIC_DOMAIN;
+const bot = isProduction
+  ? new TelegramBot(TOKEN)
+  : new TelegramBot(TOKEN, { polling: true });
+
+if (isProduction) {
+  const webhookUrl = `https://${process.env.RAILWAY_PUBLIC_DOMAIN}/bot${TOKEN}`;
+  bot.setWebHook(webhookUrl);
+}
 
 bot.onText(/\/start(.*)/, (msg, match) => {
   const roomId = (match[1] || '').trim();
@@ -45,4 +56,6 @@ bot.onText(/\/play/, async (msg) => {
   }
 });
 
-console.log('Bot is running...');
+console.log('Bot is running...' + (isProduction ? ' (webhook mode)' : ' (polling mode)'));
+
+module.exports = { bot };
