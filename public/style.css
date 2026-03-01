@@ -7,6 +7,7 @@
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
   background: #1a6b3c url('background.png') repeat;
+  background-size: 5% 5%;
   color: #fff;
   min-height: 100vh;
   display: flex;
