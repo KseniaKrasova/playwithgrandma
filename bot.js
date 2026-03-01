@@ -1,5 +1,6 @@
 require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
+const { createRoom } = require('./game/room');
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const GAME_URL = process.env.GAME_URL;
@@ -28,9 +29,8 @@ bot.onText(/\/start(.*)/, (msg, match) => {
 
 bot.onText(/\/play/, async (msg) => {
   try {
-    const res = await fetch(`${GAME_URL}/api/create-room`, { method: 'POST' });
-    const { roomId } = await res.json();
-    const link = `${GAME_URL}/?room=${roomId}`;
+    const room = createRoom();
+    const link = `${GAME_URL}/?room=${room.id}`;
     const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}`;
 
     bot.sendMessage(msg.chat.id, `Your game link:\n\n👉 ${link}\n\nNow invite your opponent!`, {
