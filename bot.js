@@ -12,8 +12,12 @@ const bot = isProduction
   : new TelegramBot(TOKEN, { polling: true });
 
 if (isProduction) {
-  const webhookUrl = `https://${process.env.RAILWAY_PUBLIC_DOMAIN}/bot${TOKEN}`;
-  bot.setWebHook(webhookUrl);
+  const webhookUrl = `${GAME_URL}/bot${TOKEN}`;
+  bot.setWebHook(webhookUrl).then(() => {
+    console.log('Webhook set:', GAME_URL + '/bot<token>');
+  }).catch(err => {
+    console.error('Failed to set webhook:', err.message);
+  });
 }
 
 bot.onText(/\/start(.*)/, (msg, match) => {
