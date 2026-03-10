@@ -388,27 +388,9 @@ button:active {
   height: 96px;
 }
 
-/* ── My turn: yellow glow overlay (bottom half) ── */
-#myTurnOverlay {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 50%;
-  background: linear-gradient(to top, rgba(255, 215, 0, 0.5), rgba(255, 215, 0, 0.15) 60%, transparent);
-  pointer-events: none;
-  z-index: 40;
-  transition: opacity 0.4s ease;
-}
-
-#myTurnOverlay.hidden {
-  display: block !important;
-  opacity: 0;
-  pointer-events: none;
-}
-
-#myTurnOverlay:not(.hidden) {
-  opacity: 1;
+/* ── My turn: yellow glow around player cards ── */
+#playerHand.my-turn {
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.7)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.4));
 }
 
 /* ── Waiting for opponent overlay ── */

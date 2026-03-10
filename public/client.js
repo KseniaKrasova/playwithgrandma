@@ -260,7 +260,6 @@ const btnDoneThrow = document.getElementById('btnDoneThrow');
 const gameOverEl = document.getElementById('gameOver');
 const gameOverText = document.getElementById('gameOverText');
 const btnRematch = document.getElementById('btnRematch');
-const myTurnOverlay = document.getElementById('myTurnOverlay');
 const waitingOverlay = document.getElementById('waitingOverlay');
 
 // ── Auto-join from URL ──
@@ -555,7 +554,7 @@ function renderGameOver(state) {
 
 function renderTurnOverlays(state) {
   if (state.phase === 'GAME_OVER') {
-    myTurnOverlay.classList.add('hidden');
+    playerHand.classList.remove('my-turn');
     waitingOverlay.classList.add('hidden');
     return;
   }
@@ -566,10 +565,10 @@ function renderTurnOverlays(state) {
     (state.phase === 'THROWING_IN' && state.isAttacker);
 
   if (isMyTurn) {
-    myTurnOverlay.classList.remove('hidden');
+    playerHand.classList.add('my-turn');
     waitingOverlay.classList.add('hidden');
   } else {
-    myTurnOverlay.classList.add('hidden');
+    playerHand.classList.remove('my-turn');
     waitingOverlay.classList.remove('hidden');
   }
 }
