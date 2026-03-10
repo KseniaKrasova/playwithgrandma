@@ -388,6 +388,54 @@ button:active {
   height: 96px;
 }
 
+/* ── My turn: yellow glow overlay (bottom half) ── */
+#myTurnOverlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(255, 215, 0, 0.5), rgba(255, 215, 0, 0.15) 60%, transparent);
+  pointer-events: none;
+  z-index: 40;
+  transition: opacity 0.4s ease;
+}
+
+#myTurnOverlay.hidden {
+  display: block !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#myTurnOverlay:not(.hidden) {
+  opacity: 1;
+}
+
+/* ── Waiting for opponent overlay ── */
+#waitingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 45;
+}
+
+.waiting-message {
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 16px 36px;
+  border-radius: 16px;
+  animation: pulse 1.5s infinite;
+}
+
 /* Game over overlay */
 #gameOver {
   position: fixed;

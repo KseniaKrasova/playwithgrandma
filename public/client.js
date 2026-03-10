@@ -260,6 +260,8 @@ const btnDoneThrow = document.getElementById('btnDoneThrow');
 const gameOverEl = document.getElementById('gameOver');
 const gameOverText = document.getElementById('gameOverText');
 const btnRematch = document.getElementById('btnRematch');
+const myTurnOverlay = document.getElementById('myTurnOverlay');
+const waitingOverlay = document.getElementById('waitingOverlay');
 
 // ── Auto-join from URL ──
 const urlParams = new URLSearchParams(window.location.search);
@@ -389,6 +391,7 @@ function render(state) {
   renderPlayerHand(state);
   renderControls(state);
   renderGameOver(state);
+  renderTurnOverlays(state);
 }
 
 function renderStatus(state) {
@@ -547,6 +550,27 @@ function renderGameOver(state) {
     gameOverText.textContent = 'Вы победили! Противник — дурак!';
   } else {
     gameOverText.textContent = 'Вы проиграли... Вы — дурак!';
+  }
+}
+
+function renderTurnOverlays(state) {
+  if (state.phase === 'GAME_OVER') {
+    myTurnOverlay.classList.add('hidden');
+    waitingOverlay.classList.add('hidden');
+    return;
+  }
+
+  const isMyTurn =
+    (state.phase === 'ATTACKING' && state.isAttacker) ||
+    (state.phase === 'DEFENDING' && state.isDefender) ||
+    (state.phase === 'THROWING_IN' && state.isAttacker);
+
+  if (isMyTurn) {
+    myTurnOverlay.classList.remove('hidden');
+    waitingOverlay.classList.add('hidden');
+  } else {
+    myTurnOverlay.classList.add('hidden');
+    waitingOverlay.classList.remove('hidden');
   }
 }
 
